@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxBlanca — Luxury & Modern Homes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#D4AF37;--gold2:#F0D060;--dark:#080808;--dark2:#0f0f0f;--dark3:#181818;--cream:#F8F4EE;--cream2:#E8E2D8;--muted:#777}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--dark);color:var(--cream);overflow-x:hidden;cursor:none}
+#cur{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform .1s;mix-blend-mode:difference}
+#cur2{width:32px;height:32px;border:1px solid var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:transform .4s ease;opacity:.4}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:24px 64px;transition:all .4s}
+nav.solid{background:rgba(8,8,8,.97);padding:16px 64px;border-bottom:1px solid rgba(212,175,55,.1)}
+.logo{font-family:'Playfair Display',serif;font-size:24px;letter-spacing:4px;color:var(--gold);text-decoration:none;font-weight:700}
+.logo span{color:var(--cream);font-weight:400}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:var(--cream2);text-decoration:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:300;opacity:.7;transition:all .2s}
+.nav-links a:hover{opacity:1;color:var(--gold)}
+.nav-btn{background:none;border:1px solid var(--gold);color:var(--gold);padding:9px 22px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s}
+.nav-btn:hover{background:var(--gold);color:var(--dark)}
+.hero{height:100vh;position:relative;display:flex;align-items:center;overflow:hidden}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s}
+.slide.active{opacity:1}
+.s1{background-image:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600&q=85')}
+.s2{background-image:url('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=1600&q=85')}
+.s3{background-image:url('https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1600&q=85')}
+.s4{background-image:url('https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1600&q=85')}
+.s5{background-image:url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1600&q=85')}
+.s6{background-image:url('https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600&q=85')}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(8,8,8,.93) 0%,rgba(8,8,8,.65) 55%,rgba(8,8,8,.25) 100%)}
+.hero-content{position:relative;z-index:2;padding:0 64px;max-width:780px}
+.eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:28px;opacity:0;animation:up .9s .2s forwards}
+.eyebrow span{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:300}
+.eline{width:48px;height:1px;background:var(--gold)}
+h1{font-family:'Playfair Display',serif;font-size:clamp(48px,6.5vw,96px);font-weight:700;line-height:1.02;color:var(--cream);opacity:0;animation:up .9s .4s forwards}
+h1 em{font-style:italic;color:var(--gold)}
+.hsub{font-size:15px;line-height:1.9;color:var(--muted);margin:24px 0 40px;font-weight:300;max-width:500px;opacity:0;animation:up .9s .6s forwards}
+.hbtns{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:up .9s .8s forwards}
+.btn-g{background:var(--gold);color:var(--dark);border:none;padding:15px 34px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:500;cursor:none;transition:all .3s;text-decoration:none;display:inline-block}
+.btn-g:hover{background:var(--gold2);transform:translateY(-2px)}
+.btn-o{background:none;border:1px solid rgba(212,175,55,.4);color:var(--cream2);padding:15px 34px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;text-decoration:none;display:inline-block}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.dots{position:absolute;bottom:40px;left:64px;z-index:3;display:flex;gap:10px}
+.dot{width:28px;height:2px;background:rgba(212,175,55,.3);cursor:none;transition:all .3s}
+.dot.active{background:var(--gold);width:48px}
+.city-bar{background:var(--dark3);border-top:1px solid rgba(212,175,55,.12);border-bottom:1px solid rgba(212,175,55,.12);padding:0 64px;display:flex;align-items:center;overflow-x:auto}
+.city-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:20px 28px 20px 0;border-right:1px solid rgba(212,175,55,.15);margin-right:20px;white-space:nowrap;font-weight:300}
+.ctab{padding:20px 24px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:300;color:var(--muted);cursor:none;border:none;background:none;transition:all .3s;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Jost',sans-serif}
+.ctab:hover{color:var(--cream2)}
+.ctab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--dark2)}
+.sbox{padding:36px 40px;border-right:1px solid rgba(212,175,55,.08);text-align:center}
+.sbox:last-child{border-right:none}
+.sn{font-family:'Playfair Display',serif;font-size:44px;color:var(--gold);line-height:1}
+.sl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:8px;font-weight:300}
+.listings{padding:80px 64px;background:var(--dark)}
+.sec-tag{font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);font-weight:300;display:block;margin-bottom:14px}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,54px);font-weight:700;line-height:1.1;color:var(--cream)}
+.sec-title em{font-style:italic;color:var(--gold)}
+.sec-sub{font-size:14px;color:var(--muted);margin-top:10px;font-weight:300;line-height:1.8;max-width:500px}
+.city-grid{display:none;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:44px}
+.city-grid.active{display:grid}
+/* MUSIC PLAYER */
+.music-player{position:fixed;bottom:90px;right:28px;z-index:500;background:rgba(8,8,8,.92);border:1px solid rgba(212,175,55,.3);padding:10px 16px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(10px)}
+.music-btn{background:none;border:none;color:var(--gold);font-size:20px;cursor:pointer;padding:0;line-height:1}
+.music-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'Jost',sans-serif}
+.music-bar{display:flex;gap:2px;align-items:center;height:16px}
+.music-bar span{width:2px;background:var(--gold);border-radius:2px;animation:bar 1s ease-in-out infinite}
+.music-bar span:nth-child(1){height:6px;animation-delay:0s}
+.music-bar span:nth-child(2){height:12px;animation-delay:.2s}
+.music-bar span:nth-child(3){height:8px;animation-delay:.4s}
+.music-bar span:nth-child(4){height:14px;animation-delay:.1s}
+.music-bar span:nth-child(5){height:6px;animation-delay:.3s}
+.music-bar.paused span{animation-play-state:paused}
+@keyframes bar{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.8)}}
+
+/* LISTING SLIDESHOW */
+.lslide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
+.lslide.active{opacity:1}
+.lwrap{position:relative;height:240px;overflow:hidden}
+.limg{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.25,.46,.45,.94);display:block}
+.lcard{position:relative;overflow:hidden;background:var(--dark3);cursor:none;transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.loverlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.8) 0%,transparent 55%);opacity:.4;transition:opacity .4s}
+.lcard:hover .loverlay{opacity:.8}
+.linfo{padding:20px}
+.lprice{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold);margin-bottom:5px}
+.lname{font-family:'Playfair Display',serif;font-size:17px;color:var(--cream);margin-bottom:3px;font-weight:400}
+.lloc{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:14px}
+.ldets{display:flex;gap:14px;border-top:1px solid rgba(212,175,55,.1);padding-top:12px}
+.ldi{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.ldv{font-size:13px;color:var(--cream2);font-weight:400}
+.lcta{display:block;margin-top:12px;text-align:center;background:var(--gold);color:var(--dark);padding:11px;font-size:9px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;opacity:0;transform:translateY(8px);transition:all .3s;font-weight:500;border:none;cursor:none;width:100%;font-family:'Jost',sans-serif}
+.services{padding:80px 64px;background:var(--dark2)}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:48px}
+.scard{background:var(--dark3);padding:40px 32px;border:1px solid rgba(212,175,55,.06);position:relative;overflow:hidden;transition:border-color .3s}
+.scard::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--gold);transition:width .4s}
+.scard:hover{border-color:rgba(212,175,55,.2)}
+.scard:hover::after{width:100%}
+.sicon{font-size:30px;margin-bottom:20px;display:block}
+.scard h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:400;color:var(--cream);margin-bottom:10px}
+.scard p{font-size:13px;color:var(--muted);line-height:1.85;font-weight:300}
+.stag{margin-top:14px;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-weight:400}
+.why{padding:80px 64px;background:var(--dark);border-top:1px solid rgba(212,175,55,.08)}
+.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:48px}
+.wcard{background:var(--dark3);padding:32px 22px;border:1px solid rgba(212,175,55,.06);text-align:center}
+.wicon{font-size:32px;margin-bottom:14px}
+.wcard h4{font-family:'Playfair Display',serif;font-size:18px;color:var(--cream);margin-bottom:8px}
+.wcard p{font-size:12px;color:var(--muted);line-height:1.7;font-weight:300}
+.contact{padding:80px 64px;background:var(--dark2)}
+.cin{display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1100px;margin:0 auto}
+.cform{display:flex;flex-direction:column;gap:13px;margin-top:36px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fg label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:300}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.03);border:1px solid rgba(212,175,55,.18);color:var(--cream);font-family:'Jost',sans-serif;font-size:14px;padding:12px 15px;outline:none;transition:border-color .3s;font-weight:300;resize:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold)}
+.fg select option{background:var(--dark3)}
+.sbtn2{background:var(--gold);color:var(--dark);border:none;padding:15px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:500;cursor:none;transition:background .3s;margin-top:4px}
+.sbtn2:hover{background:var(--gold2)}
+.succ{display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);color:var(--gold);padding:13px;text-align:center;font-size:12px;letter-spacing:1px;margin-top:8px}
+.cinfo{padding-top:36px}
+.ci{margin-bottom:24px}
+.cil{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:7px;font-weight:300}
+.civ{font-family:'Playfair Display',serif;font-size:19px;color:var(--cream);font-weight:400}
+.cis{font-size:12px;color:var(--muted);margin-top:3px;font-weight:300}
+.cdiv{width:40px;height:1px;background:rgba(212,175,55,.25);margin:24px 0}
+footer{background:var(--dark);border-top:1px solid rgba(212,175,55,.1);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.flogo{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);letter-spacing:4px;font-weight:700}
+.flogo span{color:var(--cream2);font-weight:400}
+.fcopy{font-size:11px;color:var(--muted);letter-spacing:1px;font-weight:300}
+.flinks{display:flex;gap:22px}
+.flinks a{font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:1px;transition:color .2s;font-weight:300}
+.flinks a:hover{color:var(--gold)}
+.floats{position:fixed;bottom:28px;right:28px;z-index:500;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.fwa{width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;text-decoration:none;box-shadow:0 4px 24px rgba(37,211,102,.35)}
+.fconsult{background:var(--gold);color:var(--dark);padding:11px 16px;font-size:9px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:500;box-shadow:0 4px 24px rgba(212,175,55,.3)}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){
+  nav{padding:18px 24px}nav.solid{padding:14px 24px}.nav-links{display:none}
+  .hero-content{padding:0 24px}.dots{left:24px}.city-bar{padding:0 24px}
+  .stats{grid-template-columns:repeat(2,1fr)}.sbox{border-bottom:1px solid rgba(212,175,55,.08)}
+  .listings,.services,.why,.contact{padding:56px 24px}
+  .city-grid.active{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr}
+  .wgrid{grid-template-columns:repeat(2,1fr)}.cin{grid-template-columns:1fr;gap:36px}
+  footer{flex-direction:column;padding:24px}
+}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GWNRL12TV8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-GWNRL12TV8');
+</script>
+</head>
+<body>
+<div id="cur"></div><div id="cur2"></div>
+<nav id="nav">
+  <a class="logo" href="#" style="display:flex;flex-direction:column;line-height:1;text-decoration:none"><span style="white-space:nowrap">LUX<span style="color:var(--gold);font-weight:400">BLANCA</span></span><span style="font-size:8px;letter-spacing:3px;color:var(--muted);font-family:'Jost',sans-serif;font-weight:300;text-transform:uppercase;margin-top:4px">Luxury & Modern Homes</span></a>
+  <ul class="nav-links">
+    <li><a href="#listings">Properties</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-btn" onclick="scroll2('contact')">Free Consultation</button>
+</nav>
+
+<section class="hero">
+  <div class="slide s1 active"></div><div class="slide s2"></div><div class="slide s3"></div>
+  <div class="slide s4"></div><div class="slide s5"></div><div class="slide s6"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><div class="eline"></div><span>LuxBlanca · Premium Real Estate</span></div>
+    <h1>Your Gateway to<br><em>Luxury Living</em></h1>
+    <p class="hsub">From Manhattan penthouses to Miami waterfront estates — LuxBlanca connects you with the most extraordinary properties across the United States.</p>
+    <div class="hbtns">
+      <a href="#listings" class="btn-g">Explore Properties</a>
+      <a href="#contact" class="btn-o">Free Consultation</a>
+    </div>
+  </div>
+  <div class="dots" id="dots"></div>
+</section>
+
+<div class="city-bar">
+  <span class="city-lbl">Jump To</span>
+  <a class="ctab active" href="#nyc">New York City</a>
+  <a class="ctab" href="#la">Los Angeles</a>
+  <a class="ctab" href="#miami">Miami</a>
+  <a class="ctab" href="#chicago">Chicago</a>
+  <a class="ctab" href="#vegas">Las Vegas</a>
+  <a class="ctab" href="#houston">Houston</a>
+</div>
+
+<div class="stats">
+  <div class="sbox"><div class="sn">60+</div><div class="sl">Luxury Listings</div></div>
+  <div class="sbox"><div class="sn">6</div><div class="sl">Major Cities</div></div>
+  <div class="sbox"><div class="sn">$4B+</div><div class="sl">Deals Closed</div></div>
+  <div class="sbox"><div class="sn">98%</div><div class="sl">Client Satisfaction</div></div>
+</div>
+
+<section class="listings" id="listings">
+  <span class="sec-tag" id="ctag">New York City · Luxury Properties</span>
+  <h2 class="sec-title">Exclusive <em>Listings</em><br>Handpicked For You</h2>
+  <p class="sec-sub" id="csub">The most coveted addresses across Manhattan, Brooklyn, Queens and beyond.</p>
+
+  <!-- NYC -->
+  <h3 id="nyc" style="font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin:40px 0 20px;padding-top:20px">🗽 <em style="color:var(--gold)">New York City</em> · Luxury Properties</h3>
+  <div class="city-grid active" style="display:grid">
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=85" alt="Central Park"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$4,200,000</div><div class="lname">Central Park View Residence</div><div class="lloc">📍 Upper West Side, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3.5</span>Baths</div><div class="ldi"><span class="ldv">3,100</span>Sq Ft</div><div class="ldi"><span class="ldv">Park</span>View</div></div><button class="lcta" onclick="tourReq('Central Park View Residence, NYC')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=700&q=85" alt="Tribeca"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,800,000</div><div class="lname">Tribeca Designer Penthouse</div><div class="lloc">📍 Tribeca, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Roof</span>Terrace</div></div><button class="lcta" onclick="tourReq('Tribeca Designer Penthouse, NYC')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=85" alt="SoHo"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$18,500/mo</div><div class="lname">SoHo Grand Floor Loft</div><div class="lloc">📍 SoHo, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,600</span>Sq Ft</div><div class="ldi"><span class="ldv">City</span>Views</div></div><button class="lcta" onclick="tourReq('SoHo Grand Floor Loft, NYC')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=85" alt="Chelsea"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$6,900,000</div><div class="lname">Chelsea Art District Penthouse</div><div class="lloc">📍 Chelsea, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4.5</span>Baths</div><div class="ldi"><span class="ldv">4,200</span>Sq Ft</div><div class="ldi"><span class="ldv">River</span>Views</div></div><button class="lcta" onclick="tourReq('Chelsea Art District Penthouse, NYC')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=85" alt="Brooklyn"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,500,000</div><div class="lname">Brooklyn Heights Brownstone</div><div class="lloc">📍 Brooklyn Heights, Brooklyn</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Garden</span>+Roof</div></div><button class="lcta" onclick="tourReq('Brooklyn Heights Brownstone, NYC')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=85" alt="Midtown"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$12,000/mo</div><div class="lname">Midtown East Sky Residence</div><div class="lloc">📍 Midtown East, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">2</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">1,900</span>Sq Ft</div><div class="ldi"><span class="ldv">42nd</span>Floor</div></div><button class="lcta" onclick="tourReq('Midtown East Sky Residence, NYC')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85" alt="UES"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$7,500,000</div><div class="lname">Upper East Side Classic Mansion</div><div class="lloc">📍 Upper East Side, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">5</span>Baths</div><div class="ldi"><span class="ldv">5,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Private</span>Garden</div></div><button class="lcta" onclick="tourReq('Upper East Side Classic Mansion, NYC')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=700&q=85" alt="Harlem"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,800,000</div><div class="lname">Harlem Renaissance Townhouse</div><div class="lloc">📍 Harlem, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,900</span>Sq Ft</div><div class="ldi"><span class="ldv">Roof</span>Deck</div></div><button class="lcta" onclick="tourReq('Harlem Renaissance Townhouse, NYC')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=700&q=85" alt="Park Slope"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$8,500/mo</div><div class="lname">Park Slope Garden Duplex</div><div class="lloc">📍 Park Slope, Brooklyn</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">2,100</span>Sq Ft</div><div class="ldi"><span class="ldv">Private</span>Garden</div></div><button class="lcta" onclick="tourReq('Park Slope Garden Duplex, NYC')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">NYC</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=85" alt="FiDi"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$9,200,000</div><div class="lname">Financial District Sky Tower</div><div class="lloc">📍 Financial District, Manhattan</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,600</span>Sq Ft</div><div class="ldi"><span class="ldv">Harbor</span>Views</div></div><button class="lcta" onclick="tourReq('Financial District Sky Tower, NYC')">Request Private Tour →</button></div></div>
+  </div>
+
+  <!-- LA -->
+  <h3 id="la" style="font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin:60px 0 20px;padding-top:20px">🌴 <em style="color:var(--gold)">Los Angeles</em> · Luxury Properties</h3>
+  <div class="city-grid active" style="display:grid">
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=85" alt="Beverly Hills"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$8,500,000</div><div class="lname">Beverly Hills Grand Estate</div><div class="lloc">📍 Beverly Hills, Los Angeles</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">7</span>Baths</div><div class="ldi"><span class="ldv">7,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Gym</div></div><button class="lcta" onclick="tourReq('Beverly Hills Grand Estate, LA')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=700&q=85" alt="Hollywood Hills"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,200,000</div><div class="lname">Hollywood Hills View Home</div><div class="lloc">📍 Hollywood Hills, LA</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4.5</span>Baths</div><div class="ldi"><span class="ldv">4,100</span>Sq Ft</div><div class="ldi"><span class="ldv">City</span>Views</div></div><button class="lcta" onclick="tourReq('Hollywood Hills View Home, LA')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=700&q=85" alt="Malibu"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$22,000/mo</div><div class="lname">Malibu Beachfront Villa</div><div class="lloc">📍 Malibu, Los Angeles</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Ocean</span>Front</div></div><button class="lcta" onclick="tourReq('Malibu Beachfront Villa, LA')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=700&q=85" alt="Bel Air"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$14,000,000</div><div class="lname">Bel Air Mega Mansion</div><div class="lloc">📍 Bel Air, Los Angeles</div><div class="ldets"><div class="ldi"><span class="ldv">8</span>Beds</div><div class="ldi"><span class="ldv">10</span>Baths</div><div class="ldi"><span class="ldv">12,000</span>Sq Ft</div><div class="ldi"><span class="ldv">Cinema</span>+Pool</div></div><button class="lcta" onclick="tourReq('Bel Air Mega Mansion, LA')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=85" alt="Santa Monica"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$4,800,000</div><div class="lname">Santa Monica Ocean Condo</div><div class="lloc">📍 Santa Monica, LA</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Ocean</span>Views</div></div><button class="lcta" onclick="tourReq('Santa Monica Ocean Condo, LA')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=85" alt="WeHo"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$16,000/mo</div><div class="lname">West Hollywood Designer Loft</div><div class="lloc">📍 West Hollywood, LA</div><div class="ldets"><div class="ldi"><span class="ldv">2</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">1,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Rooftop</span>Pool</div></div><button class="lcta" onclick="tourReq('West Hollywood Designer Loft, LA')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=85" alt="Calabasas"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$6,500,000</div><div class="lname">Calabasas Gated Community</div><div class="lloc">📍 Calabasas, Los Angeles</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">6</span>Baths</div><div class="ldi"><span class="ldv">6,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Gated</span>+Pool</div></div><button class="lcta" onclick="tourReq('Calabasas Gated Community, LA')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=85" alt="Venice"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,900,000</div><div class="lname">Venice Beach Modern Home</div><div class="lloc">📍 Venice Beach, LA</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Beach</span>Access</div></div><button class="lcta" onclick="tourReq('Venice Beach Modern Home, LA')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=700&q=85" alt="Pasadena"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$11,000/mo</div><div class="lname">Pasadena Heritage Mansion</div><div class="lloc">📍 Pasadena, Los Angeles</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Garden</span>+Pool</div></div><button class="lcta" onclick="tourReq('Pasadena Heritage Mansion, LA')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">LA</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=85" alt="Silver Lake"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,600,000</div><div class="lname">Silver Lake Architectural Gem</div><div class="lloc">📍 Silver Lake, Los Angeles</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Lake</span>Views</div></div><button class="lcta" onclick="tourReq('Silver Lake Architectural Gem, LA')">Request Private Tour →</button></div></div>
+  </div>
+
+  <!-- MIAMI -->
+  <h3 id="miami" style="font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin:60px 0 20px;padding-top:20px">🌊 <em style="color:var(--gold)">Miami</em> · Luxury Properties</h3>
+  <div class="city-grid active" style="display:grid">
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=700&q=85" alt="Brickell"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$6,900,000</div><div class="lname">Brickell Waterfront Tower</div><div class="lloc">📍 Brickell, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Bay</span>Views</div></div><button class="lcta" onclick="tourReq('Brickell Waterfront Tower, Miami')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=700&q=85" alt="South Beach"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,200,000</div><div class="lname">South Beach Ocean Condo</div><div class="lloc">📍 South Beach, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Ocean</span>View</div></div><button class="lcta" onclick="tourReq('South Beach Ocean Condo, Miami')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=85" alt="Coral Gables"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$14,000/mo</div><div class="lname">Coral Gables Grand Villa</div><div class="lloc">📍 Coral Gables, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">5</span>Baths</div><div class="ldi"><span class="ldv">4,600</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Dock</div></div><button class="lcta" onclick="tourReq('Coral Gables Grand Villa, Miami')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=85" alt="Aventura"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$4,800,000</div><div class="lname">Aventura Skyline Penthouse</div><div class="lloc">📍 Aventura, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,500</span>Sq Ft</div><div class="ldi"><span class="ldv">Ocean</span>+City</div></div><button class="lcta" onclick="tourReq('Aventura Skyline Penthouse, Miami')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=85" alt="Bal Harbour"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$8,200,000</div><div class="lname">Bal Harbour Oceanfront Estate</div><div class="lloc">📍 Bal Harbour, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">7</span>Baths</div><div class="ldi"><span class="ldv">6,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Beach</span>Front</div></div><button class="lcta" onclick="tourReq('Bal Harbour Oceanfront Estate, Miami')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=85" alt="Coconut Grove"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$9,500/mo</div><div class="lname">Coconut Grove Waterfront Home</div><div class="lloc">📍 Coconut Grove, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,100</span>Sq Ft</div><div class="ldi"><span class="ldv">Boat</span>Dock</div></div><button class="lcta" onclick="tourReq('Coconut Grove Waterfront Home, Miami')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=85" alt="Sunny Isles"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,500,000</div><div class="lname">Sunny Isles Ultra Luxury</div><div class="lloc">📍 Sunny Isles Beach, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4.5</span>Baths</div><div class="ldi"><span class="ldv">3,900</span>Sq Ft</div><div class="ldi"><span class="ldv">Ocean</span>Front</div></div><button class="lcta" onclick="tourReq('Sunny Isles Ultra Luxury, Miami')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=700&q=85" alt="Wynwood"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,100,000</div><div class="lname">Wynwood Art Loft Residence</div><div class="lloc">📍 Wynwood, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">2,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Rooftop</span>Deck</div></div><button class="lcta" onclick="tourReq('Wynwood Art Loft Residence, Miami')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85" alt="Key Biscayne"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$18,000/mo</div><div class="lname">Key Biscayne Island Villa</div><div class="lloc">📍 Key Biscayne, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">5</span>Baths</div><div class="ldi"><span class="ldv">4,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Private</span>Beach</div></div><button class="lcta" onclick="tourReq('Key Biscayne Island Villa, Miami')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Miami</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=700&q=85" alt="Design District"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,700,000</div><div class="lname">Design District Penthouse</div><div class="lloc">📍 Design District, Miami</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3.5</span>Baths</div><div class="ldi"><span class="ldv">2,700</span>Sq Ft</div><div class="ldi"><span class="ldv">Sky</span>Terrace</div></div><button class="lcta" onclick="tourReq('Design District Penthouse, Miami')">Request Private Tour →</button></div></div>
+  </div>
+
+  <!-- CHICAGO -->
+  <h3 id="chicago" style="font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin:60px 0 20px;padding-top:20px">🏙️ <em style="color:var(--gold)">Chicago</em> · Luxury Properties</h3>
+  <div class="city-grid active" style="display:grid">
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=85" alt="Gold Coast"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,800,000</div><div class="lname">Gold Coast Penthouse</div><div class="lloc">📍 Gold Coast, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3.5</span>Baths</div><div class="ldi"><span class="ldv">3,500</span>Sq Ft</div><div class="ldi"><span class="ldv">Lake</span>Views</div></div><button class="lcta" onclick="tourReq('Gold Coast Penthouse, Chicago')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=85" alt="Lincoln Park"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,100,000</div><div class="lname">Lincoln Park Historic Mansion</div><div class="lloc">📍 Lincoln Park, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Garden</span>+Deck</div></div><button class="lcta" onclick="tourReq('Lincoln Park Historic Mansion, Chicago')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=85" alt="Streeterville"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$9,500/mo</div><div class="lname">Streeterville Sky Residence</div><div class="lloc">📍 Streeterville, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">2.5</span>Baths</div><div class="ldi"><span class="ldv">2,200</span>Sq Ft</div><div class="ldi"><span class="ldv">38th</span>Floor</div></div><button class="lcta" onclick="tourReq('Streeterville Sky Residence, Chicago')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=85" alt="River North"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$4,200,000</div><div class="lname">River North Luxury Loft</div><div class="lloc">📍 River North, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,100</span>Sq Ft</div><div class="ldi"><span class="ldv">River</span>Views</div></div><button class="lcta" onclick="tourReq('River North Luxury Loft, Chicago')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=85" alt="Wicker Park"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$1,800,000</div><div class="lname">Wicker Park Modern Greystone</div><div class="lloc">📍 Wicker Park, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Roof</span>Deck</div></div><button class="lcta" onclick="tourReq('Wicker Park Modern Greystone, Chicago')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=700&q=85" alt="West Loop"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$7,200/mo</div><div class="lname">West Loop Chef's District Loft</div><div class="lloc">📍 West Loop, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">2</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">1,900</span>Sq Ft</div><div class="ldi"><span class="ldv">Open</span>Plan</div></div><button class="lcta" onclick="tourReq('West Loop Chef District Loft, Chicago')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=700&q=85" alt="Lakeview"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,600,000</div><div class="lname">Lakeview Lakefront Estate</div><div class="lloc">📍 Lakeview, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Lake</span>Front</div></div><button class="lcta" onclick="tourReq('Lakeview Lakefront Estate, Chicago')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85" alt="Hyde Park"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$1,400,000</div><div class="lname">Hyde Park Victorian Manor</div><div class="lloc">📍 Hyde Park, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,100</span>Sq Ft</div><div class="ldi"><span class="ldv">Park</span>Views</div></div><button class="lcta" onclick="tourReq('Hyde Park Victorian Manor, Chicago')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=700&q=85" alt="South Loop"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,800/mo</div><div class="lname">South Loop Museum Flat</div><div class="lloc">📍 South Loop, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">2</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">1,600</span>Sq Ft</div><div class="ldi"><span class="ldv">Grant</span>Park</div></div><button class="lcta" onclick="tourReq('South Loop Museum Flat, Chicago')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Chicago</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=85" alt="Magnificent Mile"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,100,000</div><div class="lname">Magnificent Mile Tower Suite</div><div class="lloc">📍 Magnificent Mile, Chicago</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,600</span>Sq Ft</div><div class="ldi"><span class="ldv">Lake</span>+City</div></div><button class="lcta" onclick="tourReq('Magnificent Mile Tower Suite, Chicago')">Request Private Tour →</button></div></div>
+  </div>
+
+  <!-- VEGAS -->
+  <h3 id="vegas" style="font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin:60px 0 20px;padding-top:20px">🎰 <em style="color:var(--gold)">Las Vegas</em> · Luxury Properties</h3>
+  <div class="city-grid active" style="display:grid">
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=85" alt="Summerlin"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$4,500,000</div><div class="lname">Summerlin Desert Estate</div><div class="lloc">📍 Summerlin, Las Vegas</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">6</span>Baths</div><div class="ldi"><span class="ldv">6,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Strip</span>Views</div></div><button class="lcta" onclick="tourReq('Summerlin Desert Estate, Las Vegas')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=85" alt="The Strip"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,800,000</div><div class="lname">Panorama Tower Penthouse</div><div class="lloc">📍 The Strip, Las Vegas</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,900</span>Sq Ft</div><div class="ldi"><span class="ldv">Strip</span>Panorama</div></div><button class="lcta" onclick="tourReq('Panorama Tower Penthouse, Las Vegas')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=700&q=85" alt="Henderson"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$11,000/mo</div><div class="lname">Henderson Luxury Villa</div><div class="lloc">📍 Henderson, Las Vegas</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,000</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Spa</div></div><button class="lcta" onclick="tourReq('Henderson Luxury Villa, Las Vegas')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=85" alt="Red Rock"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,200,000</div><div class="lname">Red Rock Canyon Estate</div><div class="lloc">📍 Red Rock, Las Vegas</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,500</span>Sq Ft</div><div class="ldi"><span class="ldv">Mountain</span>Views</div></div><button class="lcta" onclick="tourReq('Red Rock Canyon Estate, Las Vegas')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=85" alt="Mountains Edge"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$1,900,000</div><div class="lname">Mountain's Edge Modern Home</div><div class="lloc">📍 Mountain's Edge, Las Vegas</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Desert</span>Views</div></div><button class="lcta" onclick="tourReq("Mountain's Edge Modern Home, Las Vegas")">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=85" alt="Centennial Hills"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$7,500/mo</div><div class="lname">Centennial Hills Family Estate</div><div class="lloc">📍 Centennial Hills, Las Vegas</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">4,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Yard</div></div><button class="lcta" onclick="tourReq('Centennial Hills Family Estate, Las Vegas')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=700&q=85" alt="Lake Las Vegas"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,800,000</div><div class="lname">Lake Las Vegas Waterfront</div><div class="lloc">📍 Lake Las Vegas, NV</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">5</span>Baths</div><div class="ldi"><span class="ldv">5,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Lake</span>Front</div></div><button class="lcta" onclick="tourReq('Lake Las Vegas Waterfront, Las Vegas')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85" alt="Southern Highlands"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,400,000</div><div class="lname">Southern Highlands Golf Villa</div><div class="lloc">📍 Southern Highlands, LV</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">4</span>Baths</div><div class="ldi"><span class="ldv">3,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Golf</span>Course</div></div><button class="lcta" onclick="tourReq('Southern Highlands Golf Villa, Las Vegas')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=700&q=85" alt="Anthem"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$6,800/mo</div><div class="lname">Anthem Country Club Retreat</div><div class="lloc">📍 Anthem, Henderson NV</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Club</span>Access</div></div><button class="lcta" onclick="tourReq('Anthem Country Club Retreat, Las Vegas')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Las Vegas</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=85" alt="MacDonald Highlands"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$7,200,000</div><div class="lname">MacDonald Highlands Mansion</div><div class="lloc">📍 MacDonald Highlands, NV</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">7</span>Baths</div><div class="ldi"><span class="ldv">8,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Strip</span>+Mtn</div></div><button class="lcta" onclick="tourReq('MacDonald Highlands Mansion, Las Vegas')">Request Private Tour →</button></div></div>
+  </div>
+
+  <!-- HOUSTON -->
+  <h3 id="houston" style="font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin:60px 0 20px;padding-top:20px">⭐ <em style="color:var(--gold)">Houston</em> · Luxury Properties</h3>
+  <div class="city-grid active" style="display:grid">
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=700&q=85" alt="River Oaks"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,100,000</div><div class="lname">River Oaks Grand Manor</div><div class="lloc">📍 River Oaks, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">7</span>Baths</div><div class="ldi"><span class="ldv">8,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Court</div></div><button class="lcta" onclick="tourReq('River Oaks Grand Manor, Houston')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=700&q=85" alt="Memorial"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,400,000</div><div class="lname">Memorial Modern Estate</div><div class="lloc">📍 Memorial, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">5</span>Baths</div><div class="ldi"><span class="ldv">5,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Smart</span>Home</div></div><button class="lcta" onclick="tourReq('Memorial Modern Estate, Houston')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=85" alt="Uptown"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$8,500/mo</div><div class="lname">Uptown Galleria Penthouse</div><div class="lloc">📍 Uptown, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">3</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Sky</span>Terrace</div></div><button class="lcta" onclick="tourReq('Uptown Galleria Penthouse, Houston')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=85" alt="Tanglewood"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$3,800,000</div><div class="lname">Tanglewood Luxury Compound</div><div class="lloc">📍 Tanglewood, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">6</span>Baths</div><div class="ldi"><span class="ldv">6,200</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Gym</div></div><button class="lcta" onclick="tourReq('Tanglewood Luxury Compound, Houston')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=85" alt="West University"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$1,700,000</div><div class="lname">West University Craftsman</div><div class="lloc">📍 West University, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,100</span>Sq Ft</div><div class="ldi"><span class="ldv">Corner</span>Lot</div></div><button class="lcta" onclick="tourReq('West University Craftsman, Houston')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=85" alt="Montrose"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$6,200/mo</div><div class="lname">Montrose Arts District Loft</div><div class="lloc">📍 Montrose, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">2</span>Beds</div><div class="ldi"><span class="ldv">2</span>Baths</div><div class="ldi"><span class="ldv">1,800</span>Sq Ft</div><div class="ldi"><span class="ldv">Rooftop</span>Terrace</div></div><button class="lcta" onclick="tourReq('Montrose Arts District Loft, Houston')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=700&q=85" alt="The Woodlands"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$2,900,000</div><div class="lname">The Woodlands Golf Estate</div><div class="lloc">📍 The Woodlands, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">5</span>Beds</div><div class="ldi"><span class="ldv">5</span>Baths</div><div class="ldi"><span class="ldv">5,600</span>Sq Ft</div><div class="ldi"><span class="ldv">Golf</span>+Lake</div></div><button class="lcta" onclick="tourReq('The Woodlands Golf Estate, Houston')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge sale">For Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=85" alt="Heights"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$1,400,000</div><div class="lname">Houston Heights Victorian</div><div class="lloc">📍 The Heights, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">2,900</span>Sq Ft</div><div class="ldi"><span class="ldv">Porch</span>+Yard</div></div><button class="lcta" onclick="tourReq('Houston Heights Victorian, Houston')">Request Private Tour →</button></div></div>
+    <div class="lcard"><span class="lbadge rent">For Rent</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=700&q=85" alt="Sugar Land"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$5,500/mo</div><div class="lname">Sugar Land Suburban Villa</div><div class="lloc">📍 Sugar Land, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">4</span>Beds</div><div class="ldi"><span class="ldv">3</span>Baths</div><div class="ldi"><span class="ldv">3,400</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Yard</div></div><button class="lcta" onclick="tourReq('Sugar Land Suburban Villa, Houston')">Schedule Viewing →</button></div></div>
+    <div class="lcard"><span class="lbadge luxury">Luxury · Sale</span><span class="ctag">Houston</span><div class="lwrap"><img class="limg" src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=700&q=85" alt="Bellaire"></div><div class="loverlay"></div><div class="linfo"><div class="lprice">$4,200,000</div><div class="lname">Bellaire Mega Estate</div><div class="lloc">📍 Bellaire, Houston</div><div class="ldets"><div class="ldi"><span class="ldv">6</span>Beds</div><div class="ldi"><span class="ldv">6</span>Baths</div><div class="ldi"><span class="ldv">7,100</span>Sq Ft</div><div class="ldi"><span class="ldv">Pool</span>+Cinema</div></div><button class="lcta" onclick="tourReq('Bellaire Mega Estate, Houston')">Request Private Tour →</button></div></div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <span class="sec-tag">What We Offer</span>
+  <h2 class="sec-title">Full-Service <em>Luxury</em><br>Real Estate</h2>
+  <div class="sgrid">
+    <div class="scard"><span class="sicon">🏡</span><h3>Buy Your Dream Home</h3><p>We guide you from first showing to closing day across all 6 cities. Zero stress, complete transparency, expert negotiation on your behalf.</p><div class="stag">Available across all 6 major cities</div></div>
+    <div class="scard"><span class="sicon">💰</span><h3>Sell For Top Dollar</h3><p>Premium marketing, professional photography, virtual tours, and placement on every major platform. Maximum exposure nationwide.</p><div class="stag">Nationwide premium marketing</div></div>
+    <div class="scard"><span class="sicon">🔑</span><h3>Luxury Rentals</h3><p>Curated high-end rentals in every city. All properties verified. Move in with complete confidence and zero surprises.</p><div class="stag">Short & long-term options</div></div>
+    <div class="scard"><span class="sicon">📊</span><h3>Investment Portfolio</h3><p>Our advisors identify high-ROI markets across all 6 cities and structure deals that maximize your returns.</p><div class="stag">Multi-city portfolio strategy</div></div>
+    <div class="scard"><span class="sicon">🤝</span><h3>Referral Network</h3><p>Refer clients in any city and earn competitive referral fees. Our network ensures every client gets expert local care.</p><div class="stag">20–35% referral fee per deal</div></div>
+    <div class="scard"><span class="sicon">⚖️</span><h3>Legal & Financing</h3><p>Trusted mortgage lenders and real estate attorneys in every market for a seamless, legally sound transaction.</p><div class="stag">Pre-approval assistance available</div></div>
+  </div>
+</section>
+
+<section class="why">
+  <span class="sec-tag" style="display:block;margin-bottom:14px;text-align:center">Why LuxBlanca</span>
+  <h2 class="sec-title" style="text-align:center">The Smart Way to Buy,<br>Sell & <em>Invest</em></h2>
+  <div class="wgrid">
+    <div class="wcard"><div class="wicon">🏙️</div><h4>6 Major Cities</h4><p>NYC, LA, Miami, Chicago, Las Vegas & Houston — one trusted name nationwide</p></div>
+    <div class="wcard"><div class="wicon">💎</div><h4>Luxury Focus</h4><p>Exclusively premium properties — penthouses, estates, and waterfront homes</p></div>
+    <div class="wcard"><div class="wicon">🤝</div><h4>White Glove Service</h4><p>Dedicated agents, private tours, and full concierge support from first call to closing</p></div>
+    <div class="wcard"><div class="wicon">📈</div><h4>Market Expertise</h4><p>Deep local knowledge in every market — smart pricing, fast deals, maximum value</p></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="cin">
+    <div>
+      <span class="sec-tag">Get In Touch</span>
+      <h2 class="sec-title">Let's Find Your<br><em>Perfect</em> Property</h2>
+      <div class="cdiv"></div>
+      <div class="cinfo">
+        <div class="ci"><div class="cil">Call or Text</div><div class="civ">(646) 259-1328</div><div class="cis">Mon–Sat, 8am–8pm · Any city, any question</div></div>
+        <div class="ci"><div class="cil">WhatsApp</div><a href="https://wa.me/16462591328" target="_blank" style="color:var(--gold);text-decoration:none;font-size:14px">💬 Message us on WhatsApp →</a><div class="cis">Usually replies within minutes</div></div>
+        <div class="ci"><div class="cil">Company</div><div class="civ">LuxBlanca</div><div class="cis">NYC · LA · Miami · Chicago · Las Vegas · Houston</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="cform">
+        <div class="fg"><label>Full Name</label><input type="text" id="fn" placeholder="Your name"></div>
+        <div class="fg"><label>Phone Number</label><input type="tel" id="fp" placeholder="+1 (000) 000-0000"></div>
+        <div class="fg"><label>City of Interest</label><select id="fc"><option value="">Select a city</option><option>New York City</option><option>Los Angeles</option><option>Miami</option><option>Chicago</option><option>Las Vegas</option><option>Houston</option></select></div>
+        <div class="fg"><label>I'm Looking To</label><select id="ft"><option value="">Select</option><option>Buy a luxury property</option><option>Sell my property</option><option>Rent a luxury property</option><option>List my property</option><option>Investment advice</option></select></div>
+        <div class="fg"><label>Budget</label><select id="fb"><option value="">Select budget</option><option>Under $1M</option><option>$1M – $3M</option><option>$3M – $6M</option><option>$6M – $10M</option><option>$10M+</option></select></div>
+        <div class="fg"><label>Message</label><textarea id="fm" rows="3" placeholder="Tell us about your dream property..."></textarea></div>
+        <button class="sbtn2" onclick="submitForm()">Send via WhatsApp →</button>
+        <div class="succ" id="succ">✓ Opening WhatsApp — connecting you now!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">LUX<span style="color:var(--gold);font-weight:400">BLANCA</span></div>
+  <div class="fcopy">© 2025 LuxBlanca. All rights reserved.</div>
+  <div class="flinks"><a href="#">Privacy</a><a href="#">Terms</a><a href="#contact">Contact</a></div>
+</footer>
+
+<div class="floats">
+  <a href="#contact" class="fconsult">🏠 Find Properties</a>
+  <a href="https://wa.me/16462591328" target="_blank" class="fwa">💬</a>
+</div>
+
+<script>
+const c=document.getElementById('cur'),c2=document.getElementById('cur2');
+document.addEventListener('mousemove',e=>{c.style.transform=`translate(${e.clientX-4}px,${e.clientY-4}px)`;c2.style.transform=`translate(${e.clientX-16}px,${e.clientY-16}px)`});
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>60));
+const slides=document.querySelectorAll('.slide');
+const dotsEl=document.getElementById('dots');
+let cur=0;
+slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>goSlide(i);dotsEl.appendChild(d)});
+function goSlide(n){slides[cur].classList.remove('active');document.querySelectorAll('.dot')[cur].classList.remove('active');cur=n;slides[cur].classList.add('active');document.querySelectorAll('.dot')[cur].classList.add('active')}
+setInterval(()=>goSlide((cur+1)%slides.length),5000);
+const cityData={
+  nyc:{tag:'New York City · Luxury Properties',sub:'The most coveted addresses across Manhattan, Brooklyn, Queens and beyond.'},
+  la:{tag:'Los Angeles · Luxury Properties',sub:'From Beverly Hills estates to Malibu beachfront villas — the finest in Southern California.'},
+  miami:{tag:'Miami · Luxury Properties',sub:'Waterfront condos, ocean-view penthouses, and Coral Gables villas — South Florida at its finest.'},
+  chicago:{tag:'Chicago · Luxury Properties',sub:'Gold Coast penthouses, Lincoln Park mansions, and lakefront residences.'},
+  vegas:{tag:'Las Vegas · Luxury Properties',sub:'Desert estates, Strip-view penthouses, and lakefront villas — luxury Nevada living.'},
+  houston:{tag:'Houston · Luxury Properties',sub:'River Oaks mansions, Memorial estates, and Uptown penthouses — the best of Houston.'}
+};
+function setCity(id,btn){
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.city-grid').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('ctag').textContent=cityData[id].tag;
+  document.getElementById('csub').textContent=cityData[id].sub;
+  document.getElementById('listings').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function tourReq(prop){
+  const msg=encodeURIComponent(`Hi LuxBlanca! 👋\n\nI'm interested in:\n🏠 ${prop}\n\nPlease send me more details and available times for a private tour.\n\nThank you!`);
+  window.open(`https://wa.me/16462591328?text=${msg}`,'_blank');
+}
+function submitForm(){
+  const n=document.getElementById('fn').value;
+  if(!n){alert('Please enter your name.');return;}
+  const p=document.getElementById('fp').value;
+  const c=document.getElementById('fc').value;
+  const t=document.getElementById('ft').value;
+  const b=document.getElementById('fb').value;
+  const m=document.getElementById('fm').value;
+  const msg=encodeURIComponent(`Hi LuxBlanca! 👋\n\nNew Inquiry:\nName: ${n}\nPhone: ${p}\nCity: ${c}\nLooking to: ${t}\nBudget: ${b}\nMessage: ${m}\n\nVia LuxBlanca`);
+  window.open(`https://wa.me/16462591328?text=${msg}`,'_blank');
+  document.getElementById('succ').style.display='block';
+  document.querySelectorAll('.cform input,.cform select,.cform textarea').forEach(el=>el.value='');
+  setTimeout(()=>document.getElementById('succ').style.display='none',5000);
+}
+function scroll2(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}})},{threshold:.08});
+document.querySelectorAll('.lcard,.scard,.wcard').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity .6s ease,transform .6s ease';obs.observe(el)});
+
+// LISTING CARD SLIDESHOWS
+const cardPhotos = [
+  // Living rooms, kitchens, bedrooms, bathrooms - luxury interiors
+  ['photo-1560448204-e02f11c3d0e2','photo-1556909114-f6e7ad7d3136','photo-1583847268964-b28dc8f51f92','photo-1484154218962-a197022b5858'],
+  ['photo-1616594039964-ae9021a400a0','photo-1556909172-54557c7e4fb7','photo-1507089947368-19c1da9775ae','photo-1554995207-c18c203602cb'],
+  ['photo-1554995207-c18c203602cb','photo-1556909190-8c2e9c6a77a5','photo-1560185008-b033106af5c3','photo-1502672260266-1c1ef2d93688'],
+  ['photo-1493809842364-78817add7ffb','photo-1556909114-f6e7ad7d3136','photo-1484154218962-a197022b5858','photo-1560448204-e02f11c3d0e2'],
+  ['photo-1502672260266-1c1ef2d93688','photo-1554995207-c18c203602cb','photo-1616594039964-ae9021a400a0','photo-1493809842364-78817add7ffb'],
+  ['photo-1484154218962-a197022b5858','photo-1560448204-e02f11c3d0e2','photo-1502672260266-1c1ef2d93688','photo-1554995207-c18c203602cb'],
+  ['photo-1560448204-e02f11c3d0e2','photo-1616594039964-ae9021a400a0','photo-1493809842364-78817add7ffb','photo-1484154218962-a197022b5858'],
+  ['photo-1616594039964-ae9021a400a0','photo-1554995207-c18c203602cb','photo-1502672260266-1c1ef2d93688','photo-1560448204-e02f11c3d0e2'],
+  ['photo-1493809842364-78817add7ffb','photo-1484154218962-a197022b5858','photo-1616594039964-ae9021a400a0','photo-1554995207-c18c203602cb'],
+  ['photo-1554995207-c18c203602cb','photo-1502672260266-1c1ef2d93688','photo-1560448204-e02f11c3d0e2','photo-1493809842364-78817add7ffb'],
+];
+
+document.querySelectorAll('.lwrap').forEach((wrap, i) => {
+  const photos = cardPhotos[i % cardPhotos.length];
+  // Remove existing img
+  wrap.innerHTML = '';
+  // Create slides
+  photos.forEach((photo, j) => {
+    const div = document.createElement('div');
+    div.className = 'lslide' + (j === 0 ? ' active' : '');
+    div.style.backgroundImage = `url('https://images.unsplash.com/${photo}?w=700&q=85')`;
+    wrap.appendChild(div);
+  });
+  // Auto rotate every 3 seconds
+  let current = 0;
+  setInterval(() => {
+    wrap.querySelectorAll('.lslide')[current].classList.remove('active');
+    current = (current + 1) % photos.length;
+    wrap.querySelectorAll('.lslide')[current].classList.add('active');
+  }, 3000 + (i * 400)); // Stagger so not all change at same time
+});
+
+// MUSIC SYSTEM - Multiple genres + Welcome Voice
+const tracks = [
+  {name:'🎺 Salsa Groove', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+  {name:'💕 Quiet Love Song', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3'},
+  {name:'✝️ Christian Worship', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3'},
+  {name:'🌍 Makossa Beat', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'},
+  {name:'🤠 Country Song', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3'},
+  {name:'👨‍👩‍👧 Family Song', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3'},
+];
+
+let trackIndex = 0;
+let playing = false;
+const audio = new Audio();
+audio.volume = 0.25;
+audio.src = tracks[0].url;
+
+audio.addEventListener('ended', () => {
+  trackIndex = (trackIndex + 1) % tracks.length;
+  audio.src = tracks[trackIndex].url;
+  audio.play();
+  updatePlayer();
+});
+
+function updatePlayer() {
+  document.getElementById('mBtn').textContent = playing ? '⏸' : '▶';
+  document.getElementById('mLabel').textContent = tracks[trackIndex].name;
+  document.getElementById('mBars').classList.toggle('paused', !playing);
+}
+
+function toggleMusic() {
+  if (!playing) {
+    audio.play().then(() => {
+      playing = true;
+      updatePlayer();
+    }).catch(() => {
+      document.getElementById('mLabel').textContent = 'Tap to play 🎵';
+    });
+  } else {
+    audio.pause();
+    playing = false;
+    updatePlayer();
+  }
+}
+
+function nextTrack() {
+  trackIndex = (trackIndex + 1) % tracks.length;
+  audio.src = tracks[trackIndex].url;
+  if (playing) audio.play();
+  updatePlayer();
+}
+
+function prevTrack() {
+  trackIndex = (trackIndex - 1 + tracks.length) % tracks.length;
+  audio.src = tracks[trackIndex].url;
+  if (playing) audio.play();
+  updatePlayer();
+}
+
+// WELCOME VOICE — speaks when page loads
+function speakWelcome() {
+  if ('speechSynthesis' in window) {
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = "Welcome to LuxBlanca. Pick the home you love and send us a message so we can help you find your perfect luxury property.";
+    msg.volume = 0.9;
+    msg.rate = 0.85;
+    msg.pitch = 1.1;
+    // Try to find a female voice
+    const voices = window.speechSynthesis.getVoices();
+    const femaleVoice = voices.find(v =>
+      v.name.toLowerCase().includes('female') ||
+      v.name.toLowerCase().includes('woman') ||
+      v.name.toLowerCase().includes('samantha') ||
+      v.name.toLowerCase().includes('victoria') ||
+      v.name.toLowerCase().includes('karen') ||
+      v.name.toLowerCase().includes('moira') ||
+      v.name.toLowerCase().includes('fiona') ||
+      v.name.toLowerCase().includes('zira') ||
+      v.name.toLowerCase().includes('google uk english female') ||
+      (v.name.toLowerCase().includes('google') && v.name.toLowerCase().includes('female'))
+    );
+    if (femaleVoice) msg.voice = femaleVoice;
+    window.speechSynthesis.speak(msg);
+  }
+}
+
+// AUTO-START: welcome voice first, then music after voice ends
+window.addEventListener('load', () => {
+  // Wait for voices to load
+  setTimeout(() => {
+    if ('speechSynthesis' in window) {
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = "Welcome to LuxBlanca. Pick the home you love and send us a message so we can help you find your perfect luxury property.";
+      msg.volume = 0.9;
+      msg.rate = 0.82;
+      msg.pitch = 1.15;
+      const voices = window.speechSynthesis.getVoices();
+      const femaleVoice = voices.find(v =>
+        v.name.toLowerCase().includes('samantha') ||
+        v.name.toLowerCase().includes('victoria') ||
+        v.name.toLowerCase().includes('karen') ||
+        v.name.toLowerCase().includes('zira') ||
+        v.name.toLowerCase().includes('female') ||
+        v.name.toLowerCase().includes('google uk english female')
+      );
+      if (femaleVoice) msg.voice = femaleVoice;
+      // After voice finishes, start music
+      msg.onend = () => {
+        setTimeout(() => {
+          audio.play().then(() => {
+            playing = true;
+            updatePlayer();
+          }).catch(() => {});
+        }, 500);
+      };
+      window.speechSynthesis.speak(msg);
+    } else {
+      // No speech synthesis, just start music
+      audio.play().then(() => {
+        playing = true;
+        updatePlayer();
+      }).catch(() => {});
+    }
+  }, 1000);
+});
+</script>
+
+<!-- MUSIC PLAYER -->
+<div class="music-player" style="flex-direction:column;gap:6px;min-width:160px">
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="music-btn" onclick="prevTrack()" style="font-size:14px">⏮</button>
+    <button class="music-btn" id="mBtn" onclick="toggleMusic()">▶</button>
+    <button class="music-btn" onclick="nextTrack()" style="font-size:14px">⏭</button>
+    <div class="music-bar paused" id="mBars">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="music-label" id="mLabel" style="font-size:8px">🎺 Salsa Groove</div>
+</div>
+
+</body>
+</html>
